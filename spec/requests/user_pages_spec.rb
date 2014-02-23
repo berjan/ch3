@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'byebug'
 
 describe "User pages" do
 
@@ -41,7 +42,8 @@ describe "User pages" do
 
       describe "after saving the user" do
         before { click_button submit }
-        #user = User.find_by(email: 'user@example.com')
+        user = User.find_by(email: 'user@example.com')
+        #byebug
         #by some weird reason I cannot get the user after signup, causing a undefined method call on 'name'
         it { should have_title("Example User") }
         it { should have_selector('div.alert.alert-success', text: 'Welcome') }
