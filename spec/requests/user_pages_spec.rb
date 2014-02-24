@@ -45,6 +45,7 @@ describe "User pages" do
         user = User.find_by(email: 'user@example.com')
         #byebug
         #by some weird reason I cannot get the user after signup, causing a undefined method call on 'name'
+        it { should have_link('Sign out') }
         it { should have_title("Example User") }
         it { should have_selector('div.alert.alert-success', text: 'Welcome') }
       end
