@@ -1,6 +1,7 @@
 
 class User < ActiveRecord::Base
-  before_save { self.email = email.to_s.downcase! }
+
+  #before_save { self.email.downcase! } This is causing an error while logging in. Is setting e-mail to nil :(
   before_create :create_remember_token
 
   validates :name,  presence: true, length: { maximum: 50 }
