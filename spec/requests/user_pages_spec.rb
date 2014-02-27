@@ -41,10 +41,10 @@ describe "User pages" do
           visit users_path
         end
 
-        #it { should have_link('delete', href: user_path(User.first)) } #getting error: Capybara::Ambiguous:
+        it { should have_link('delete', href: user_path(User.first)) } #getting error: Capybara::Ambiguous:
         #Ambiguous match, found 3 elements matching link "delete"
         it "should be able to delete another user" do
-          #expect { click_link('delete') }.to change(User, :count).by(-1) #receiving same error as above
+          #expect { first(:link, 'delete') }.to change(User, :count).by(-1) #receiving same error as above
         end
         it { should_not have_link('delete', href: user_path(admin)) }
       end
@@ -59,10 +59,19 @@ describe "User pages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Foo") }
+    let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Bar") }
+
     before { visit user_path(user) }
 
     it { should have_content(user.name) }
     it { should have_title(user.name) }
+
+    describe "microposts" do
+      it { should have_content(m1.content) }
+      it { should have_content(m2.content) }
+      it { should have_content(user.microposts.count) }
+    end
   end
 
   describe "signup" do
@@ -91,7 +100,7 @@ describe "User pages" do
         before { click_button submit }
         user = User.find_by(email: 'user@example.com')
         #byebug
-        #by some weird reason I cannot get the user after signup, causing a undefined method call on 'name'
+        #by some weird reason I cannot get the user after signup, causing a undefined method call on 'name' #todo is caused by downcase method of email
         it { should have_link('Sign out') }
         it { should have_title("Example User") }
         it { should have_success_message('Welcome') }
